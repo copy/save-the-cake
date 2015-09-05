@@ -1,0 +1,170 @@
+{
+  name = "fred";
+  moves = [(1,-1); (-1,-1); (2,-2); (-2,-2); (0,1); (0,-1)];
+  image_name = "fred.png";
+}
+{
+  name = "rapptz";
+  moves = [(1,-1); (-1,-1); (1,1); (-1,1); (0,-1); (0, 1)];
+  image_name = "rapptz.png";
+}
+{
+  name = "abhishek";
+  moves = [(0,1); (0,-1); (1,0); (-1,0)];
+  image_name = "abhishek.jpg";
+}
+{
+  name = "irxmaxell";
+  moves = [(0,1); (0,-1); (1,0); (-1,0); (0,2); (0,-2); (2,0); (-2,0)];
+  image_name = "irxmaxell.jpeg";
+}
+{
+  name = "rlemon";
+  moves = [(0,1); (0,-1); (1,0); (-1,0); (0,3); (0,-3); (3,0); (-3,0); (0,5); (0,-5); (5,0); (-5,0)];
+  image_name = "rlemon.jpg";
+}
+{
+  name = "jandvorak";
+  moves = [(1, -2); (-1, -2); (1,2); (-1,2)];
+  image_name = "jandvorak.png";
+}
+{
+  name = "robot";
+  moves = [(0,3); (0,-3); (3,0); (-3,0); (0,5); (0,-5); (5,0); (-5,0); (0,7); (0,-7); (7,0); (-7,0)];
+  image_name = "robot.jpeg";
+}
+{
+  name = "badger";
+  moves = [(0,1); (0,-1); (1,0); (-1,0); (1, -2); (-1, -2)];
+  image_name = "badger.png";
+}
+{
+  name = "jerry";
+  moves = [];
+  image_name = "jerry.jpeg";
+}
+{
+  name = "secondrikudo";
+  moves = [];
+  image_name = "secondrikudo.png";
+}
+{
+  name = "bartek";
+  moves = [];
+  image_name = "bartek.jpeg";
+}
+{
+  name = "jonclements";
+  moves = [(0,1); (0,-1); (1,0); (-1,0)];
+  image_name = "jonclements.jpg";
+}
+{
+  name = "sehe";
+  moves = [];
+  image_name = "sehe.png";
+}
+{
+  name = "benjamin";
+  moves = [];
+  image_name = "benjamin.jpeg";
+}
+{
+  name = "kendall";
+  moves = [];
+  image_name = "kendall.jpeg";
+}
+{
+  name = "someguy";
+  moves = [(0,1); (0,-1); (1,0); (-1,0)];
+  image_name = "someguy.png";
+}
+{
+  name = "caprica";
+  moves = [];
+  image_name = "caprica.jpg";
+}
+{
+  name = "lion";
+  moves = [];
+  image_name = "lion.jpeg";
+}
+{
+  name = "somekittens";
+  moves = [];
+  image_name = "somekittens.png";
+}
+{
+  name = "cat";
+  moves = [];
+  image_name = "cat.jpeg";
+}
+{
+  name = "loktar";
+  moves = [];
+  image_name = "loktar.jpg";
+}
+{
+  name = "stackedcrooked";
+  moves = [];
+  image_name = "stackedcrooked.png";
+}
+{
+  name = "copy";
+  moves = [];
+  image_name = "copy.png";
+}
+{
+  name = "lrio";
+  moves = [];
+  image_name = "lrio.jpeg";
+}
+{
+  name = "sterling";
+  moves = [];
+  image_name = "sterling.jpg";
+}
+{
+  name = "elyse";
+  moves = [];
+  image_name = "elyse.png";
+}
+{
+  name = "mystical";
+  moves = [];
+  image_name = "mystical.jpg";
+}
+{
+  name = "teresko";
+  moves = [];
+  image_name = "teresko.jpeg";
+}
+{
+  name = "etienne";
+  moves = [];
+  image_name = "etienne.jpeg";
+}
+{
+  name = "nooble";
+  moves = [(0,1); (0,-1); (1,0); (-1,0)];
+  image_name = "nooble.jpg";
+}
+{
+  name = "xeo";
+  moves = [];
+  image_name = "xeo.png";
+}
+{
+  name = "florian";
+  moves = [];
+  image_name = "florian.jpeg";
+}
+{
+  name = "puppy";
+  moves = [(0,1); (0,-1); (1,0); (-1,0)];
+  image_name = "puppy.jpeg";
+}
+{
+  name = "zirak";
+  moves = [];
+  image_name = "zirak.png";
+}

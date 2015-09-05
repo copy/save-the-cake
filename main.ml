@@ -4,8 +4,9 @@ let tile_size = 32
 let number_of_tiles = 20
 let width = number_of_tiles * tile_size
 let height = number_of_tiles * tile_size
-let number_of_players = 14
+let number_of_players = 12
 let number_of_criminals = 40
+let criminal_move_rate = 0.40
 
 
 type player = {
@@ -147,7 +148,7 @@ let available_players = [
 };
 {
   name = "Mystical";
-  moves = [(0,3); (0,-3); (3,0); (-3,0)];
+  moves = [(0,3); (0,-3); (3,0); (-3,0); (1, -2); (-1, -2); (1,2); (-1,2)];
   image_name = "mystical.jpg";
 };
 {
@@ -157,7 +158,7 @@ let available_players = [
 };
 {
   name = "Etienne";
-  moves = [(2, 1); (2,-1); (2,2); (2, -3); (2, 4); (2,-5); (2,6); (2,-7)];
+  moves = [(0,1); (0,-1); (1,0); (-1,0); (3,-3); (-3,-3); (3,3); (-3,3); (5,-5); (-5,-5)];
   image_name = "etienne.jpeg";
 };
 {
@@ -167,12 +168,12 @@ let available_players = [
 };
 {
   name = "Xeo";
-  moves = [(1,1); (-1,1); (2,2); (-2,2); (3,1); (5,5); (0,1); (0,2); (-2,2); (3,1); (0,-1)];
+  moves = [(0,1); (0,-1); (1,0); (-1,0); (3,-3); (-3,-3); (3,3); (-3,3)];
   image_name = "xeo.png";
 };
 {
   name = "Florian";
-  moves = [(2, 1); (2,-1); (2,2); (2, -3); (2, 4); (2,-5); (2,6); (2,-7)];
+  moves = [(0,1); (0,2); (0,3); (0,4); (1,1); (-1,1); (0,-1); (3,0); (-3,0); (2,0); (-2,0)];
   image_name = "florian.jpeg";
 };
 {
@@ -218,6 +219,7 @@ let test_image = make_image "img/bartek.jpeg"
 let criminal_image = make_image "img/criminal.jpg"
 let cake_image = make_image "img/cake.gif"
 let gray_rectangle = make_image "img/gray_rectangle.png"
+let purple_rectangle = make_image "img/purple.png"
 
 let debug_error str = Firebug.console##error (str);;
 let debug_print str = Firebug.console##log (str);;
@@ -264,7 +266,7 @@ let draw_object obj ctx x y =
 
 let draw_moves ctx x y p =
   let draw_move (mx, my) =
-    ctx##drawImage (gray_rectangle, float_of_int ((x + mx) * tile_size), float_of_int ((y + my) * tile_size))
+    ctx##drawImage (purple_rectangle, float_of_int ((x + mx) * tile_size), float_of_int ((y + my) * tile_size))
   in
   List.iter draw_move p.moves
 
@@ -282,6 +284,9 @@ let step ctx =
   redraw ctx;
   true
 
+let is_valid_tile (x, y) =
+  x >= 0 && y >= 0 && x < number_of_tiles && y < number_of_tiles
+
 let rec loop ctx =
   catching_bind
     (Lwt_js.sleep 0.016)
@@ -289,16 +294,19 @@ let rec loop ctx =
     print_exn
 
 let is_empty_tile (x, y) =
+  is_valid_tile (x, y) &&
   match board.(y).(x) with
   | Empty -> true
   | _ -> false
 
 let is_criminal_tile (x, y) =
+  is_valid_tile (x, y) &&
   match board.(y).(x) with
   | Criminal -> true
   | _ -> false
 
 let is_player_tile (x, y) =
+  is_valid_tile (x, y) &&
   match board.(y).(x) with
   | Player _ -> true
   | _ -> false
@@ -336,17 +344,39 @@ let is_criminal = function
   | Criminal -> true
   | _ -> false
 
+let prob f =
+  CCRandom.run (CCRandom.float_range 0.0 1.0) < f
+
+let randint low high =
+  CCRandom.run (CCRandom.int_range low high)
+
+let criminal_move from to_ =
+  if is_valid_tile to_ && not (is_criminal_tile to_) then
+    do_move from to_
+
 let do_ai_move () =
   let move_criminal y x p =
     match p with
     | Criminal ->
-      if CCRandom.run (CCRandom.int_range 0 100) > 33 then
+      if prob criminal_move_rate then
       begin
         let towards_mid = if x > number_of_tiles / 2 then -1 else 1 in
         if y = 0 then
-          do_move (x, y) (x + towards_mid, y)
-        else
-          do_move (x, y) (x + towards_mid, y - 1)
+          criminal_move (x, y) (x + towards_mid, y)
+        else begin
+          if is_player_tile (x + 1, y - 1) then
+            criminal_move (x, y) (x + 1, y - 1)
+          else if is_player_tile (x + 0, y - 1) then
+            criminal_move (x, y) (x + 0, y - 1)
+          else if is_player_tile (x - 1, y - 1) then
+            criminal_move (x, y) (x - 1, y - 1)
+            else if prob 0.1 then
+            criminal_move (x, y) (x + randint (-1) 1, y)
+          else if prob 0.3 then
+            criminal_move (x, y) (x + randint (-1) 1, y - 1)
+          else
+            criminal_move (x, y) (x + towards_mid, y - 1)
+        end
       end
     | _ -> ()
   in
@@ -391,7 +421,7 @@ let handle_click ctx players criminals ev _thread =
 let init_board team criminals b =
   b.(0).(number_of_tiles / 2) <- Cake;
   let put_player row i player =
-    b.(row).(i * 2 + row mod 2 + 1) <- Player player in
+    b.(row).(i * 3 + row mod 2 + 1) <- Player player in
   let put_criminal (x, y) =
     b.(y).(x) <- Criminal in
   let (t0, t1) = CCList.split (number_of_players / 2) team in
@@ -414,6 +444,16 @@ let make_teams () =
   let criminals = List.combine xs ys in
   (players, criminals)
 
+let catching_bind t next handle_exn =
+  Lwt.bind t (fun () -> Lwt.catch next (fun exn -> handle_exn exn; Lwt.return_unit))
+
+
+let rec loop ctx =
+  catching_bind
+    (Lwt_js.sleep 1.0)
+    (fun () -> redraw ctx; loop ctx)
+    print_exn
+
 let start _ =
   let ctx = get_canvas () in
   let player_team, criminal_team = make_teams () in
@@ -423,6 +463,7 @@ let start _ =
   Lwt.async (fun () ->
     Lwt_js_events.clicks Dom_html.window (handle_click ctx player_team criminal_team)
   );
+  ignore (loop ctx);
   Js._false
 
 let main () =
